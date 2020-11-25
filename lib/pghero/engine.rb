@@ -2,22 +2,15 @@ module PgHero
   class Engine < ::Rails::Engine
     isolate_namespace PgHero
 
-    initializer "pghero", group: :all do |app|
-      # check if Rails api mode
-      if app.config.respond_to?(:assets)
-        if defined?(Sprockets) && Sprockets::VERSION >= "4"
-          app.config.assets.precompile << "pghero/application.js"
-          app.config.assets.precompile << "pghero/application.css"
-          app.config.assets.precompile << "pghero/favicon.png"
-        else
-          # use a proc instead of a string
-          app.config.assets.precompile << proc { |path| path == "pghero/application.js" }
-          app.config.assets.precompile << proc { |path| path == "pghero/application.css" }
-          app.config.assets.precompile << proc { |path| path == "pghero/favicon.png" }
-        end
-      end
-
+    initializer "pghero", group: :all do |config|
       PgHero.time_zone = PgHero.config["time_zone"] if PgHero.config["time_zone"]
+      # View files working with flash
+      config.middleware.use ActionDispatch::Flash
+
+      # We can add all of the public assets from our engine and make them
+      # available to use.  This allows us to use javascripts, images, stylesheets
+      # etc.
+      config.middleware.insert_before(::ActionDispatch::Static, ::ActionDispatch::Static, "#{root}/public")
     end
   end
 end

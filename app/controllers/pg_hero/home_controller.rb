@@ -6,22 +6,10 @@ module PgHero
 
     http_basic_authenticate_with name: PgHero.username, password: PgHero.password if PgHero.password
 
-    before_action :check_api
     before_action :set_database
     before_action :set_query_stats_enabled
     before_action :set_show_details, only: [:index, :queries, :show_query]
     before_action :ensure_query_stats, only: [:queries]
-
-    if PgHero.config["override_csp"]
-      # note: this does not take into account asset hosts
-      # which can be a string with %d or a proc
-      # https://api.rubyonrails.org/classes/ActionView/Helpers/AssetUrlHelper.html
-      # users should set CSP manually if needed
-      # see https://github.com/ankane/pghero/issues/297
-      after_action do
-        response.headers["Content-Security-Policy"] = "default-src 'self' 'unsafe-inline'"
-      end
-    end
 
     def index
       @title = "Overview"
@@ -443,9 +431,9 @@ module PgHero
       group_connections(connections, [key]).map { |v| [v[key], v[:total_connections]] }.to_h
     end
 
-    def check_api
-      render_text "No support for Rails API. See https://github.com/pghero/pghero for a standalone app." if Rails.application.config.try(:api_only)
-    end
+    # def check_api
+    #   render_text "No support for Rails API. See https://github.com/pghero/pghero for a standalone app." if Rails.application.config.try(:api_only)
+    # end
 
     # TODO return error status code
     def render_text(message)
