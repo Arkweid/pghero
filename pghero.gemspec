@@ -1,14 +1,14 @@
 require_relative "lib/pghero/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "pghero"
+  spec.name          = "pghero_fork"
   spec.version       = PgHero::VERSION
-  spec.summary       = "A performance dashboard for Postgres"
-  spec.homepage      = "https://github.com/ankane/pghero"
+  spec.summary       = "A performance dashboard for Postgres forked for compatibility woth api_only apps"
+  spec.homepage      = "https://github.com/Arkweid/pgheroo"
   spec.license       = "MIT"
 
-  spec.author        = "Andrew Kane"
-  spec.email         = "andrew@chartkick.com"
+  spec.author        = "Aleksandr Abroskin"
+  spec.email         = "a.a.abroskin@yandex.ru"
 
   spec.files         = Dir["*.{md,txt}", "{app,config,lib,licenses}/**/*"]
   spec.require_path  = "lib"
